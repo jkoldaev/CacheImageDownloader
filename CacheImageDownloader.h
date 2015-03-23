@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Sergey Koldaev. All rights reserved.
 //
 
-#import <AppKit/AppKit.h>
+#import <UIKit/UIKit.h>
 
 #define MaxConcurentDownloadOperationsCount 4
 
@@ -16,16 +16,16 @@
 
 - (instancetype)init;
 
-- (NSImage*)image;
+- (UIImage*)image;
 
 //withut operation
 
-- (NSImage*)imageWithCachingByURL:(NSURL *)url;
-- (NSImage*)imageWithCachingByURL:(NSURL *)url andCachePath:(NSString*)path;
+- (UIImage*)imageWithCachingByURL:(NSURL *)url;
+- (UIImage*)imageWithCachingByURL:(NSURL *)url andCachePath:(NSString*)path;
 
 //with operation
-- (void)imageWithCachingByURL:(NSURL *)url andCompletion:(void(^)(NSImage* image))block;
-- (void)imageWithURL:(NSURL *)url cachePath:(NSString*)path andCompletion:(void(^)(NSImage* image))block;
+- (void)imageWithCachingByURL:(NSURL *)url andCompletion:(void(^)(UIImage* image))block;
+- (void)imageWithURL:(NSURL *)url cachePath:(NSString*)path andCompletion:(void(^)(UIImage* image))block;
 
 - (void)cancelDownloadOperation;
 - (void)cancelWithoutBreakingDownloading;

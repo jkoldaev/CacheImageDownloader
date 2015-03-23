@@ -12,7 +12,7 @@
 @private
     NSBlockOperation* _operation;
     BOOL _cancelWithoutBreaingDownloading;
-    NSImage* _image;
+    UIImage* _image;
 }
 
 @end
@@ -43,11 +43,11 @@ static NSOperationQueue* _imageDownloadingQueue;
     return self;
 }
 
-- (NSImage*)image{
+- (UIImage*)image{
     return _image;
 }
 
-- (NSImage*)imageWithCachingByURL:(NSURL *)url andCachePath:(NSString *)path{
+- (UIImage*)imageWithCachingByURL:(NSURL *)url andCachePath:(NSString *)path{
     NSUInteger downloadedFileSize = 0;
     NSUInteger urlFileSize = 0;
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
@@ -77,13 +77,13 @@ static NSOperationQueue* _imageDownloadingQueue;
         
         if (urlFileSize == downloadedFileSize){
             NSLog(@"File downloaded");
-            _image = [[NSImage alloc] initWithContentsOfFile:cachedFilePath];
+            _image = [[UIImage alloc] initWithContentsOfFile:cachedFilePath];
         }else{
             NSLog(@"File need download");
             [request setHTTPMethod:@"BODY"];
             NSData* data = [NSURLConnection sendSynchronousRequest:request returningResponse:&responce error:nil];
             if (data){
-                _image = [[NSImage alloc] initWithData:data];
+                _image = [[UIImage alloc] initWithData:data];
                 [data writeToFile:cachedFilePath atomically:YES];
             }
         }
@@ -93,11 +93,11 @@ static NSOperationQueue* _imageDownloadingQueue;
     return _image;
 }
 
-- (NSImage *)imageWithCachingByURL:(NSURL *)url{
+- (UIImage *)imageWithCachingByURL:(NSURL *)url{
     return [[CacheImageDownloader alloc] imageWithCachingByURL:url andCachePath:_defaultCache];
 }
 
-- (void)imageWithURL:(NSURL *)url cachePath:(NSString *)path andCompletion:(void (^)(NSImage *))block{
+- (void)imageWithURL:(NSURL *)url cachePath:(NSString *)path andCompletion:(void (^)(UIImage *))block{
     if (!_operation || _operation.isCancelled || _operation.isFinished){
         _cancelWithoutBreaingDownloading = NO;
         _operation = [NSBlockOperation blockOperationWithBlock:^{
@@ -131,13 +131,13 @@ static NSOperationQueue* _imageDownloadingQueue;
                 
                 if (urlFileSize == downloadedFileSize){
                     NSLog(@"File downloaded");
-                    _image = [[NSImage alloc] initWithContentsOfFile:cachedFilePath];
+                    _image = [[UIImage alloc] initWithContentsOfFile:cachedFilePath];
                 }else{
                     NSLog(@"File need download");
                     [request setHTTPMethod:@"BODY"];
                     NSData* data = [NSURLConnection sendSynchronousRequest:request returningResponse:&responce error:nil];
                     if (data){
-                        _image = [[NSImage alloc] initWithData:data];
+                        _image = [[UIImage alloc] initWithData:data];
                         [fileManager removeItemAtPath:cachedFilePath error:nil];
                         [data writeToFile:cachedFilePath atomically:YES];
                     }
@@ -155,7 +155,7 @@ static NSOperationQueue* _imageDownloadingQueue;
     }
 }
 
-- (void)imageWithCachingByURL:(NSURL *)url andCompletion:(void (^)(NSImage *))block{
+- (void)imageWithCachingByURL:(NSURL *)url andCompletion:(void (^)(UIImage *))block{
     [[CacheImageDownloader alloc] imageWithURL:url cachePath:_defaultCache andCompletion:block];
 }
 
